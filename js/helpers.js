@@ -134,13 +134,34 @@ var processPageDetails = function(metadata_xml) {
 
     if (mediaContainer.getElementsByTagName('Video').length) {
         if (mediaContainer.getElementsByTagName('Video')[0].getAttribute('type') === 'episode') {
-            return;
+            details.resourceTitle = mediaContainer.getElementsByTagName('Video')[0].getAttribute('title');
+            details.resourceYear = mediaContainer.getElementsByTagName('Video')[0].getAttribute('year');
+            agent = mediaContainer.getElementsByTagName('Video')[0].getAttribute('guid');
+            details.resourceType = 'episode';
+            details.resourcePath = mediaContainer.getElementsByTagName("Video")[0].getElementsByTagName("Media")[0].getElementsByTagName("Part")[0].getAttribute("file");
+            details.resourceParentID = mediaContainer.getElementsByTagName("Video")[0].getAttribute("ratingKey");
+            if(mediaContainer.getElementsByTagName("Video")[0].hasAttribute("viewOffset") !== true){
+                //view offset is undefined
+                details.resourceTimeOffset = "0"
+            } else{
+                details.resourceTimeOffset = mediaContainer.getElementsByTagName("Video")[0].getAttribute("viewOffset");
+            }
+
         } else {
             // movie
             details.resourceTitle = mediaContainer.getElementsByTagName('Video')[0].getAttribute('title');
             details.resourceYear = mediaContainer.getElementsByTagName('Video')[0].getAttribute('year');
             agent = mediaContainer.getElementsByTagName('Video')[0].getAttribute('guid');
             details.resourceType = 'movie';
+            details.resourcePath = mediaContainer.getElementsByTagName("Video")[0].getElementsByTagName("Media")[0].getElementsByTagName("Part")[0].getAttribute("file");
+
+            details.resourceParentID = mediaContainer.getElementsByTagName("Video")[0].getAttribute("ratingKey");
+            if(mediaContainer.getElementsByTagName("Video")[0].hasAttribute("viewOffset") !== true){
+                //view offset is undefined
+                details.resourceTimeOffset = "0"
+            } else{
+                details.resourceTimeOffset = mediaContainer.getElementsByTagName("Video")[0].getAttribute("viewOffset");
+            }
         }
     } else if (mediaContainer.getElementsByTagName('Directory').length) {
         // tv show

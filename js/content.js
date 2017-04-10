@@ -7,6 +7,8 @@ var titleCriticRatingContainerEl = "span[class^='PrePlayRatingRightTitle-criticR
 var criticRatingContainerEl = "div[class^='CriticRating-container-'], div[class*=' CriticRating-container-']";
 var imdbRatingContainerEl = "div[class^='CriticRating-imdb-'], div[class*=' CriticRating-imdb-']";
 var headerToolbarContainerEl = "div[class^='pageHeaderToolbar-toolbar-'], div[class*=' pageHeaderToolbar-toolbar-']";
+
+
 var task_counter = 0;
 
 
@@ -65,13 +67,21 @@ function checkElement() {
                     return;
                 }
 
-                // add IMDB rating
-                if (settings.showIMDB) {
-                    omdbApi.processResource(movieDetails);
+                if (movieDetails.resourceType !== 'episode'){
+                    // add IMDB rating
+                    if (settings.showIMDB) {
+                        omdbApi.processResource(movieDetails);
+                    }
+
+                    // add trakt rating
+                    traktApi.processResource(movieDetails);
                 }
 
-                // add trakt rating
-                traktApi.processResource(movieDetails);
+                //add MPC-HC and Explorer links for TV Episodes and Movies
+                if (movieDetails.resourcePath){
+                    injectLocalLinks(movieDetails)
+                }
+
 
             });
         });
